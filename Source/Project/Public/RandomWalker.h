@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/TimelineComponent.h"
 #include "GameFramework/Actor.h"
 #include "RandomWalker.generated.h"
 
@@ -18,30 +19,51 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+private:
+	// Vectors.
+	FVector ActorInitialLocation;
+	FVector TargetLocation;
+
+	// Time line.
+	FTimeline MovementTimeLine;
+	FOnTimelineFloat ProgressFunction;
+	FOnTimelineEvent OnTimelineFinishedFunction;
+
+	// Boolean.
+	bool bCalled;
+
+	// Debug options.
+	float TimeToDelay;
 	
+	// Function.
+	UFUNCTION()
+	void ProcessMovementTimeline(float Value);
+	UFUNCTION()
+	void OnEndMovementTimeLine();
+	FVector GetRandomDestination();
+	
+public:
 	// Custom codes.
-	// PROPERTIES:
-	UPROPERTY(VisibleAnywhere, Category = "Moveer")
+	UPROPERTY(VisibleAnywhere, Category = "RandomWalker")
 	USceneComponent* RootComp;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Mover")
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "RandomWalker")
 	UStaticMeshComponent* Mesh;
-	
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Mover")
+
+	// Controls random walker movement scale.
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RandomWalker")
 	int32 GridSize;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Mover")
-	float Speed;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Mover")
-	float Delay;
 	
 	// Random number generator.
 	FRandomStream RandomStream;
 	// Timer handle.
 	FTimerHandle Timerhandle;
-
-	// Function.
-	void RandomDirection();
+	
+	// FloatCurve
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RandomWalker")
+	UCurveFloat* CurveFloat;
 };
