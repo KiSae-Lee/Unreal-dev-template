@@ -28,6 +28,7 @@ private:
 	// Vectors.
 	FVector ActorInitialLocation;
 	FVector TargetLocation;
+	TArray<FVector> VisitedLocation;
 
 	// Time line.
 	FTimeline MovementTimeLine;
@@ -46,13 +47,25 @@ private:
 	UFUNCTION()
 	void OnEndMovementTimeLine();
 	FVector GetRandomDestination();
+	void ShowIndicator();
+	void UpdateVisitedLocation();
+
+	// Debug.
+	void ShowDebugScreenMessage(FString Message, FColor Color);
 	
 public:
-	// Custom codes.
+	// flag.
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RandomWalker")
+	bool bShowIndicator;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RandomWalker")
+	bool bDebug = true;
+	// Properties.
 	UPROPERTY(VisibleAnywhere, Category = "RandomWalker")
 	USceneComponent* RootComp;
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "RandomWalker")
 	UStaticMeshComponent* Mesh;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RandomWalker")
+	TSubclassOf<class AActor> IndicatorBP;
 
 	// Controls random walker movement scale.
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RandomWalker")
@@ -60,8 +73,6 @@ public:
 	
 	// Random number generator.
 	FRandomStream RandomStream;
-	// Timer handle.
-	FTimerHandle Timerhandle;
 	
 	// FloatCurve
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RandomWalker")

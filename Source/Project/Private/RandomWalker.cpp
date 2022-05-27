@@ -18,6 +18,7 @@ ARandomWalker::ARandomWalker()
 
 	GridSize = 100;
 	bCalled = false;
+	bShowIndicator = true;
 }
 
 // Called when the game starts or when spawned
@@ -26,37 +27,31 @@ void ARandomWalker::BeginPlay()
 	Super::BeginPlay();
 
 	// if CurveFloat is not null.
-	if(CurveFloat)
+	if (CurveFloat)
 	{
 		TimeToDelay = CurveFloat->FloatCurve.GetLastKey().Value;
-		/*The ProgressFunction contains the signature of the function that is
-		going to execute every time we tick our timeline.
-		Think of the ProgressFunction as a delegate!*/
+
+		// Timeline options.
 		FOnTimelineFloat ProcessMovement;
-		/*In order to bind the function our UFUNCTION we need to create a FName which contains
-		the name of the function we want to call every time the timeline advances.
-		Binding the HandleProgress function to the ProgressFunction...*/
 		ProcessMovement.BindUFunction(this, FName("ProcessMovementTimeline"));
-		//Setting up the loop status and the function that is going to fire when the timeline ticks.
 		MovementTimeLine.AddInterpFloat(CurveFloat, ProcessMovement);
 		MovementTimeLine.SetLooping(false);
 
-		/*Initializing our home and target location in order to make the actor float between them.
-		As you can see the two locations have the same X and Y but their Z value is different.*/
+		FOnTimelineEvent FinishMovement;
+		FinishMovement.BindUFunction(this, FName("OnEndMovementTimeLine"));
+		MovementTimeLine.SetTimelineFinishedFunc(FinishMovement);
+
+		// Location options.
 		ActorInitialLocation = TargetLocation = GetActorLocation();
+		// Update visited location.
+		VisitedLocation.Add(ActorInitialLocation);
 		TargetLocation += GetRandomDestination();
 
-		// Debug message.
-		GEngine->AddOnScreenDebugMessage(
-		-1,
-		2.0f,
-		FColor::Blue,
-		TargetLocation.ToString());
-		
-		FOnTimelineEvent FinishMovement;
-		FinishMovement.BindUFunction(this,FName("OnEndMovementTimeLine"));
-		MovementTimeLine.SetTimelineFinishedFunc(FinishMovement);
-		
+		// Additional options.
+		ShowIndicator();
+		// Debug.
+		ShowDebugScreenMessage(TargetLocation.ToString(), FColor::Blue);
+
 		//Starting the timeline.
 		MovementTimeLine.PlayFromStart();
 	}
@@ -72,12 +67,13 @@ void ARandomWalker::Tick(float DeltaTime)
 
 FVector ARandomWalker::GetRandomDestination()
 {
-	// debugging tests.
+	// TODO(Switch move variable to global)
 	FString direction;
 	FVector move;
+
 	RandomStream.GenerateNewSeed();
 	float randNum = RandomStream.FRand();
-	
+
 	if (randNum < 0.25f)
 	{
 		direction = "Forward";
@@ -98,13 +94,9 @@ FVector ARandomWalker::GetRandomDestination()
 		direction = "Left";
 		move = FVector(0, -GridSize, 0);
 	}
-	
-	// Debug message.
-	GEngine->AddOnScreenDebugMessage(
-		-1,
-		TimeToDelay,
-		FColor::Blue,
-		direction);
+
+	// Debug.
+	ShowDebugScreenMessage(direction, FColor::Blue);
 
 	return move;
 }
@@ -112,50 +104,84 @@ FVector ARandomWalker::GetRandomDestination()
 
 void ARandomWalker::ProcessMovementTimeline(float Value)
 {
-	if(!bCalled)
+	if (!bCalled)
 	{
-		// Debug message.
-		GEngine->AddOnScreenDebugMessage(
-		-1,
-		TimeToDelay,
-		FColor::Green,
-		TEXT("Now Timeline is running!"));
+		ShowDebugScreenMessage("Now Timeline is running!", FColor::Green);
 		bCalled = true;
 	}
-	
+
 	//Setting up the new location of our actor
 	FVector NewLocation = FMath::Lerp(ActorInitialLocation, TargetLocation, Value);
 	SetActorLocation(NewLocation);
-	
-	if(GetActorLocation() == TargetLocation)
+
+	if (GetActorLocation() == TargetLocation)
 	{
-		// Debug message.
-		GEngine->AddOnScreenDebugMessage(
-		-1,
-		TimeToDelay,
-		FColor::Cyan,
-		GetActorLocation().ToString());
+		ShowDebugScreenMessage(GetActorLocation().ToString(), FColor::Cyan);
 		bCalled = false;
 	}
 }
 
 void ARandomWalker::OnEndMovementTimeLine()
 {
-	// Debug message.
-	GEngine->AddOnScreenDebugMessage(
-	-1,
-	TimeToDelay,
-	FColor::Red,
-	TEXT("Now Timeline is ended!"));
+	ShowDebugScreenMessage("Now Timeline is ended!", FColor::Red);
+	ShowDebugScreenMessage("Setting next move...", FColor::Green);
 	
-	GEngine->AddOnScreenDebugMessage(
-	-1,
-	TimeToDelay,
-	FColor::Green,
-	TEXT("Setting next move..."));
+	FVector TempTarget;
+	TArray<FVector> CheckedLocation;
 	
 	ActorInitialLocation = TargetLocation;
 	TargetLocation += GetRandomDestination();
+	
+	// TODO(Update visited location and not to visit already visited location.)
+	/*
+	VisitedLocation.Add(ActorInitialLocation);
+	do
+	{
+		TempTarget = TargetLocation;
+		TempTarget += GetRandomDestination();
+		if (CheckedLocation.Num() == 0 || !CheckedLocation.Contains(TempTarget))
+		{
+			CheckedLocation.Add(TempTarget);
+			if (CheckedLocation.Num() == 4)
+			{
+				MovementTimeLine.Stop();
+			}
+		}
+	}
+	while (VisitedLocation.Contains(TempTarget));
+	TargetLocation = TempTarget;
+	*/	
+
+	//Additional options.
+	ShowIndicator();
+
 	MovementTimeLine.PlayFromStart();
 }
 
+void ARandomWalker::ShowIndicator()
+{
+	// When Indicator option activated.	
+	if (bShowIndicator)
+	{
+		// Spawn indicator
+		GetWorld()->SpawnActor(IndicatorBP)->SetActorLocation(ActorInitialLocation);
+		UpdateVisitedLocation();
+	}
+}
+
+void ARandomWalker::UpdateVisitedLocation()
+{
+	VisitedLocation.Add(ActorInitialLocation);
+}
+
+void ARandomWalker::ShowDebugScreenMessage(FString Message, FColor Color)
+{
+	if (bDebug)
+	{
+		GEngine->AddOnScreenDebugMessage(
+			-1,
+			TimeToDelay,
+			Color,
+			Message);
+	}
+}
