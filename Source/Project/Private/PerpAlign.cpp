@@ -10,6 +10,7 @@ APerpAlign::APerpAlign()
 	PrimaryActorTick.bCanEverTick = true;
 
 	IsDebug = true;
+	Count = 5;
 }
 
 // Called when the game starts or when spawned

@@ -61,4 +61,6 @@ public:
 	// Indicator.
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category ="PerpAlign")
 	TSubclassOf<AActor> Indicator;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category ="PerpAlign")
+	int32 Count;
 };
