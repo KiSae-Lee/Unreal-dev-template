@@ -35,11 +35,9 @@ private:
 	FOnTimelineFloat ProgressFunction;
 	FOnTimelineEvent OnTimelineFinishedFunction;
 
-	// Boolean.
-	bool bCalled;
-
 	// Debug options.
 	float TimeToDelay;
+	FString direction;
 	
 	// Function.
 	UFUNCTION()
@@ -59,6 +57,8 @@ public:
 	bool bShowIndicator;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RandomWalker")
 	bool bDebug = true;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "RandomWalker")
+	bool AvoidVisitedLocation;
 	// Properties.
 	UPROPERTY(VisibleAnywhere, Category = "RandomWalker")
 	USceneComponent* RootComp;
