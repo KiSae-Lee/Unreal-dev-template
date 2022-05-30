@@ -33,5 +33,5 @@ private:
 public:
 	// Timeline components.
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PerpAlignTimeline")
-	UCurveFloat CurveFloat;
+	UCurveFloat* CurveFloat;
 };
