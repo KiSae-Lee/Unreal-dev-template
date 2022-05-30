@@ -30,6 +30,13 @@ void APerpAlign::BeginPlay()
 	{
 		// Setup debug delay.
 		DebugDelay = CurveFloat->FloatCurve.GetLastKey().Value;
+
+		// Test.
+		for (int i = 0; i < Count; ++i)
+		{
+			Vertices.Add(GetRandomInitialLocation());
+			GetWorld()->SpawnActor(Indicator)->SetActorLocation(Vertices[i]);
+		}
 	}
 }
 
