@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/TimelineComponent.h"
 #include "GameFramework/Actor.h"
 #include "PerpAlign.generated.h"
 
@@ -23,4 +24,14 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+private:
+	// Timeline components.
+	FTimeline MovementTimeLine;
+	FOnTimelineFloat InTimelineProgress;
+	FOnTimelineEvent OnTimelineFinished;
+
+public:
+	// Timeline components.
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PerpAlignTimeline")
+	UCurveFloat CurveFloat;
 };
