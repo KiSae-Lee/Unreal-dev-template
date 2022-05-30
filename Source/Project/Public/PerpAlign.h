@@ -33,6 +33,9 @@ private:
 	FOnTimelineFloat InTimelineProgress;
 	FOnTimelineEvent OnTimelineFinished;
 
+	// Random.
+	FRandomStream Random;
+
 	// Timeline functions.
 	void InProgress();
 	void OnFinished();
