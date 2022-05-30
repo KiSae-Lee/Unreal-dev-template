@@ -30,6 +30,10 @@ private:
 	FOnTimelineFloat InTimelineProgress;
 	FOnTimelineEvent OnTimelineFinished;
 
+	// Timeline functions.
+	void InPrograss();
+	void OnFinished();
+
 public:
 	// Timeline components.
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PerpAlignTimeline")
