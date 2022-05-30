@@ -24,7 +24,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-private:
+private:	
 	// Timeline components.
 	FTimeline MovementTimeLine;
 	FOnTimelineFloat InTimelineProgress;
@@ -34,7 +34,14 @@ private:
 	void InProgress();
 	void OnFinished();
 
+	// Debug Message function.
+	void DebugMessage(FString Message, FColor Color, float Delay);
+
 public:
+	// Flags.
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PerpAlign")
+	bool IsDebug;
+	
 	// Timeline components.
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PerpAlignTimeline")
 	UCurveFloat* CurveFloat;
