@@ -18,7 +18,16 @@ void APerpAlign::BeginPlay()
 
 	if(!CurveFloat)
 	{
-		
+		DebugMessage("Please add CurveFloat!", FColor::Red, 5.0f);
+	}
+	else if(!Indicator)
+	{
+		DebugMessage("Please add Indicator!", FColor::Red, 5.0f);
+	}
+	else
+	{
+		// Setup debug delay.
+		DebugDelay = CurveFloat->FloatCurve.GetLastKey().Value;
 	}
 }
 

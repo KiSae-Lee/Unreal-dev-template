@@ -34,6 +34,9 @@ private:
 	void InProgress();
 	void OnFinished();
 
+	// Debug property.
+	float DebugDelay;
+
 	// Debug Message function.
 	void DebugMessage(FString Message, FColor Color, float Delay);
 
