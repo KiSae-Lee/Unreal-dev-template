@@ -36,6 +36,9 @@ private:
 	// Random.
 	FRandomStream Random;
 
+	// Vector functions.
+	FVector GetRandomInitialLocation();
+
 	// Timeline functions.
 	void InProgress();
 	void OnFinished();
