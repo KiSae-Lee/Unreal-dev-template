@@ -39,6 +39,20 @@ void APerpAlign::Tick(float DeltaTime)
 
 }
 
+FVector APerpAlign::GetRandomInitialLocation()
+{
+	Random.GenerateNewSeed();
+
+	FVector RandomLocation = FVector(
+		Random.RandRange(-500.0f, 500.0f),
+		Random.RandRange(-500.0f, 500.0f),
+		50);
+
+	DebugMessage("New Random Location: " + RandomLocation.ToString(), FColor::Green, 5.0f);
+
+	return  RandomLocation;
+}
+
 void APerpAlign::DebugMessage(FString Message, FColor Color, float Delay)
 {
 	if (IsDebug)
@@ -46,7 +60,6 @@ void APerpAlign::DebugMessage(FString Message, FColor Color, float Delay)
 		GEngine->AddOnScreenDebugMessage(-1, Delay, Color, Message);
 	}
 }
-
 
 // Timeline functions from here.
 void APerpAlign::InProgress()
