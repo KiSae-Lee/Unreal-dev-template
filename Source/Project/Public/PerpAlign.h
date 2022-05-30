@@ -31,11 +31,15 @@ private:
 	FOnTimelineEvent OnTimelineFinished;
 
 	// Timeline functions.
-	void InPrograss();
+	void InProgress();
 	void OnFinished();
 
 public:
 	// Timeline components.
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PerpAlignTimeline")
 	UCurveFloat* CurveFloat;
+
+	// Indicator.
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category ="PerpAlign")
+	TSubclassOf<AActor> Indicator;
 };

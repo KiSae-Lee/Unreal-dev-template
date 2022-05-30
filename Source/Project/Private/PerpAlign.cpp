@@ -25,3 +25,15 @@ void APerpAlign::Tick(float DeltaTime)
 
 }
 
+// Timeline functions from here.
+void APerpAlign::InProgress()
+{
+	
+}
+
+void APerpAlign::OnFinished()
+{
+	
+}
+
+
