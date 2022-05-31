@@ -46,12 +46,15 @@ private:
 	FVector GetRandomInitialLocation();
 
 	// Timeline functions.
+	UFUNCTION()
 	void InProgress(float Value);
+	UFUNCTION()
 	void OnFinished();
 
 	// PrepAlign function.
 	void PerpAlign(AActor* RootActor, AActor* Actor);
-
+	void ProcessPrepAlign();
+	
 	// Debug property.
 	float DebugDelay;
 
