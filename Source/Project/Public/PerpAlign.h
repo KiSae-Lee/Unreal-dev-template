@@ -3,8 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Components/TimelineComponent.h"
 #include "GameFramework/Actor.h"
+
 #include "PerpAlign.generated.h"
 
 UCLASS()
@@ -25,6 +27,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	// Actors.
+	TArray<AActor*> indicators;
+	
 	// Vectors.
 	TArray<FVector> Vertices;
 	
