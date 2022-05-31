@@ -6,6 +6,7 @@
 
 #include "Components/TimelineComponent.h"
 #include "GameFramework/Actor.h"
+#include "Kismet/KismetMathLibrary.h"
 
 #include "PerpAlign.generated.h"
 
@@ -47,6 +48,9 @@ private:
 	// Timeline functions.
 	void InProgress();
 	void OnFinished();
+
+	// PrepAlign function.
+	void PerpAlign(AActor* RootActor, AActor* Actor);
 
 	// Debug property.
 	float DebugDelay;
