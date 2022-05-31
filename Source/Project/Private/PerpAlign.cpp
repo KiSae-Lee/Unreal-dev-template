@@ -28,15 +28,45 @@ void APerpAlign::BeginPlay()
 	}
 	else
 	{
+		/*TIMELINE*/
 		// Setup debug delay.
 		DebugDelay = CurveFloat->FloatCurve.GetLastKey().Value;
+		// Setup timeline function.
+		FOnTimelineFloat Movement;
+		Movement.BindUFunction(this, FName("InProgress"));
+		MovementTimeLine.AddInterpFloat(CurveFloat, Movement);
+		// Setup end function.
+		FOnTimelineEvent Finished;
+		Finished.BindUFunction(this, FName("OnFinished"));
+		MovementTimeLine.SetTimelineFinishedFunc(Finished);
+		// looping setting.
+		MovementTimeLine.SetLooping(false);
 
-		// Test.
+		/*Test*/
 		for (int i = 0; i < Count; ++i)
 		{
+			AActor* SpawnedActor;
 			Vertices.Add(GetRandomInitialLocation());
-			GetWorld()->SpawnActor(Indicator)->SetActorLocation(Vertices[i]);
+			SpawnedActor = GetWorld()->SpawnActor(Indicator);
+			SpawnedActor->SetActorLocation(Vertices[i]);
+			indicators.Add(SpawnedActor);
 		}
+
+		/*TIMELINE*/
+		MovementTimeLine.PlayFromStart();
+	}
+
+	// Debug indicators.
+	float elementCount =  static_cast<float>(indicators.Num());
+	FString Message = FString::SanitizeFloat(elementCount);
+
+	DebugMessage("Current spawned indicator count : " + Message, FColor::Cyan, 5.0f);
+
+	for (int32 i = 0; i < indicators.Num(); ++i)
+	{
+		DebugMessage(FString::FromInt(i) + ": " + indicators[i]->GetActorLocation().ToString()
+			, FColor::Cyan
+			, 5.0f);
 	}
 }
 
@@ -44,6 +74,9 @@ void APerpAlign::BeginPlay()
 void APerpAlign::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	/*TIMELINE*/
+	MovementTimeLine.TickTimeline(DeltaTime);
 
 }
 
