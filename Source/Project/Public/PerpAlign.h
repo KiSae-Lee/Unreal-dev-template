@@ -30,6 +30,7 @@ public:
 private:
 	// Actors.
 	TArray<AActor*> indicators;
+	TArray<AActor*> initLocations;
 	
 	// Vectors.
 	TArray<FVector> Vertices;
@@ -52,8 +53,8 @@ private:
 	void OnFinished();
 
 	// PrepAlign function.
-	void PerpAlign(AActor* RootActor, AActor* Actor);
-	void ProcessPrepAlign();
+	FVector PerpAlign(AActor* RootActor, AActor* Actor);
+	TArray<FVector> ProcessPrepAlign();
 	
 	// Debug property.
 	float DebugDelay;
@@ -73,6 +74,8 @@ public:
 	// Indicator.
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category ="PerpAlign")
 	TSubclassOf<AActor> Indicator;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category ="PerpAlign")
+	TSubclassOf<AActor> InitLocation;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category ="PerpAlign")
 	int32 Count;
 };
