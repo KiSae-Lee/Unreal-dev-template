@@ -102,6 +102,53 @@ void APerpAlign::DebugMessage(FString Message, FColor Color, float Delay)
 	}
 }
 
+void APerpAlign::PerpAlign(AActor* RootActor, AActor* Actor)
+{
+	FVector rootPos = RootActor->GetActorLocation();
+	FVector pos = Actor->GetActorLocation();
+
+	double AbsX = UKismetMathLibrary::Abs(rootPos.X - pos.X);
+	double AbsY = UKismetMathLibrary::Abs(rootPos.Y - pos.Y);
+	double AbsZ = UKismetMathLibrary::Abs(rootPos.Z - pos.Z);
+	
+	double x;
+	double y;
+	double z;
+	if(AbsX > AbsY)
+	{
+		y = rootPos.Y;
+		if(AbsX > AbsZ)
+		{
+			x = pos.X;
+			z = rootPos.Z;
+		}
+		else
+		{
+			x = rootPos.X;
+			z = pos.Z;
+		}
+	}
+	else
+	{
+		x = rootPos.X;
+		if(AbsY > AbsZ)
+		{
+			y = pos.Y;
+			z = rootPos.Z;
+		}
+		else
+		{
+			y = rootPos.Y;
+			z = pos.Z;
+		}
+	}
+
+	FVector newLocation = FVector(x, y, z);
+
+	Actor->SetActorLocation(newLocation);
+}
+
+
 // Timeline functions from here.
 void APerpAlign::InProgress()
 {
