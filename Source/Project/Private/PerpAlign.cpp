@@ -87,7 +87,7 @@ FVector APerpAlign::GetRandomInitialLocation()
 	FVector RandomLocation = FVector(
 		Random.RandRange(-500.0f, 500.0f),
 		Random.RandRange(-500.0f, 500.0f),
-		50);
+		Random.RandRange(0.0f, 300.0f));
 
 	DebugMessage("New Random Location: " + RandomLocation.ToString(), FColor::Green, 5.0f);
 
