@@ -46,7 +46,7 @@ private:
 	FVector GetRandomInitialLocation();
 
 	// Timeline functions.
-	void InProgress();
+	void InProgress(float Value);
 	void OnFinished();
 
 	// PrepAlign function.
