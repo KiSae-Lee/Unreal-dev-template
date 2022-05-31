@@ -56,7 +56,7 @@ void APerpAlign::BeginPlay()
 		MovementTimeLine.PlayFromStart();
 	}
 
-	// Debug indicators.
+	/*INDICATORS DEBUG*/
 	float elementCount =  static_cast<float>(indicators.Num());
 	FString Message = FString::SanitizeFloat(elementCount);
 
